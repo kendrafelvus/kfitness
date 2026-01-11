@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KFitness | Personal Training</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- HERO SECTION -->
+  <header>
+    <h1>KFitness</h1>
+    <h2>Hard Work Makes Results</h2>
+    <p>
+      1-on-1 coaching designed to help YOU achieve YOUR goals!
+    </p>
+  </header>
+
+  <!-- ABOUT SECTION -->
+  <section class="about">
+    <div class="about-content">
+      <img src="Kendra.jpg" alt="Kendra - Personal Trainer" class="about-image">
+
+      <h3>About Me</h3>
+
+      <p>
+        Hi, I’m <strong>Kendra</strong>, a Team Scotland international boxer and personal trainer with a passion for helping others achieve their personal fitness goals. Competing at the highest level has shaped the way I train and coach.
+      </p>
+
+      <p>
+        My coaching focuses on practical, realistic training for everyone — from complete beginners to high-level competitive athletes.
+      </p>
+
+    
+    </div>
+
+    <!-- BOOKING BUTTON -->
+    <div class="booking-button-container">
+      <a href="booking.html" class="bubble-button">Book a Session</a>
+    </div>
+    <section class="reviews">
+  <h3>Client Reviews</h3>
+
+  <!-- Reviews display -->
+  <div id="reviews-list"></div>
+
+  <!-- Review form -->
+  <form id="review-form">
+
+  <input type="text" id="review-name" placeholder="Your name" required>
+
+  <!-- Star rating input -->
+  <div class="star-input">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
+  </div>
+
+  <textarea id="review-text" placeholder="Write your review..." required></textarea>
+
+  <button type="submit">Submit Review</button>
+</form>
+
+</section>
+<script>
+  const form = document.getElementById('review-form');
+  const reviewsList = document.getElementById('reviews-list');
+  const stars = document.querySelectorAll('.star-input span');
+
+  let selectedRating = 0;
+
+  // Star selection logic
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = star.dataset.value;
+      updateStars(selectedRating);
+    });
+  });
+
+  function updateStars(rating) {
+    stars.forEach(star => {
+      star.classList.toggle('active', star.dataset.value <= rating);
+    });
+  }
+
+  // Load saved reviews
+  const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+  savedReviews.forEach(addReviewToPage);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (selectedRating === 0) {
+      alert('Please select a star rating');
+      return;
+    }
+
+    const review = {
+      name: document.getElementById('review-name').value,
+      text: document.getElementById('review-text').value,
+      rating: selectedRating
+    };
+
+    savedReviews.push(review);
+    localStorage.setItem('reviews', JSON.stringify(savedReviews));
+
+    addReviewToPage(review);
+    form.reset();
+    updateStars(0);
+    selectedRating = 0;
+  });
+
+  function addReviewToPage(review) {
+    const div = document.createElement('div');
+    div.classList.add('review');
+
+    const starsHTML = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+
+    div.innerHTML = `
+      <div class="review-stars">${starsHTML}</div>
+      <strong>${review.name}</strong>
+      <p>${review.text}</p>
+    `;
+
+    reviewsList.prepend(div);
+  }
+</script>
+
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 KFitness</p>
+
+    <div class="social-links">
+      <a href="https://instagram.com/k_fitness.pt" target="_blank">Instagram</a>
+      <a href="https://tiktok.com/@kfitness_pt" target="_blank">TikTok</a>
+    </div>
+  </footer>
+
+</body>
+</html>
